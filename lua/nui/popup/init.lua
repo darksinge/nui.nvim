@@ -18,16 +18,13 @@ local u = {
   update_layout_config = layout_utils.update_layout_config,
 }
 
--- luacov: disable
 -- @deprecated
 ---@param opacity number
----@deprecated
 local function calculate_winblend(opacity)
   assert(0 <= opacity, "opacity must be equal or greater than 0")
   assert(opacity <= 1, "opacity must be equal or lesser than 0")
   return 100 - (opacity * 100)
 end
--- luacov: enable
 
 local function merge_default_options(options)
   options.relative = defaults(options.relative, "win")
@@ -55,13 +52,9 @@ local function normalize_options(options)
   return options
 end
 
---luacheck: push no max line length
-
 ---@alias nui_popup_internal_position { relative: "'cursor'"|"'editor'"|"'win'", win: number, bufpos?: number[], row: number, col: number }
 ---@alias nui_popup_internal_size { height: number, width: number }
 ---@alias nui_popup_win_config { focusable: boolean, style: "'minimal'", zindex: number, relative: "'cursor'"|"'editor'"|"'win'", win?: number, bufpos?: number[], row: number, col: number, width: number, height: number, border?: string|table, anchor?: nui_layout_option_anchor }
-
---luacheck: pop
 
 ---@class nui_popup_internal
 ---@field augroup table<'hide'|'unmount', string>
@@ -138,17 +131,13 @@ function Popup:init(options)
     self:_buf_create()
   end
 
-  -- luacov: disable
-  -- @deprecated
   if not self._.win_options.winblend and is_type("number", options.opacity) then
     self._.win_options.winblend = calculate_winblend(options.opacity)
   end
 
-  -- @deprecated
   if not self._.win_options.winhighlight and not is_type("nil", options.highlight) then
     self._.win_options.winhighlight = options.highlight
   end
-  -- luacov: enable
 
   self.border = Border(self, options.border)
   self.win_config.border = self.border:get()
@@ -366,14 +355,9 @@ function Popup:off(event)
   autocmd.buf.remove(self.bufnr, nil, event)
 end
 
--- luacov: disable
--- @deprecated
--- Use `popup:update_layout`.
----@deprecated
 function Popup:set_layout(config)
   return self:update_layout(config)
 end
--- luacov: enable
 
 ---@param config? nui_layout_options
 function Popup:update_layout(config)
@@ -395,23 +379,15 @@ function Popup:update_layout(config)
   end
 end
 
--- luacov: disable
--- @deprecated
--- Use `popup:update_layout`.
 ---@deprecated
 function Popup:set_size(size)
   self:update_layout({ size = size })
 end
--- luacov: enable
 
--- luacov: disable
--- @deprecated
--- Use `popup:update_layout`.
 ---@deprecated
 function Popup:set_position(position, relative)
   self:update_layout({ position = position, relative = relative })
 end
--- luacov: enable
 
 ---@alias NuiPopup.constructor fun(options: nui_popup_options): NuiPopup
 ---@type NuiPopup|NuiPopup.constructor
